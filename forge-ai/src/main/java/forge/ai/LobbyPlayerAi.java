@@ -36,8 +36,29 @@ public class LobbyPlayerAi extends LobbyPlayer implements IGameEntitiesFactory {
 
     private PlayerControllerAi createControllerFor(Player ai) {
         PlayerControllerAi result = new PlayerControllerAi(ai.getGame(), ai, this);
-        result.getAi().setUseSimulation(option);
+        result.getAi().setUseSimulation(option != null ? option : getSimulationModeFromProfile());
         return result;
+    }
+
+    /**
+     * Simulation mode requested by the AI profile. Only consulted when no explicit option was
+     * given at lobby creation, so it never overrides the GUI setting; it exists so that headless
+     * runs (sim mode) can pick the mode through -a &lt;profile&gt;.
+     */
+    private AIOption getSimulationModeFromProfile() {
+        String mode = AiProfileUtil.getAIProp(this, AiProps.SIMULATION_MODE);
+        if (mode == null || mode.isEmpty() || mode.equalsIgnoreCase("none")) {
+            return null;
+        }
+        if (mode.equalsIgnoreCase("hybrid")) {
+            return AIOption.USE_HYBRID_SIMULATION;
+        }
+        if (mode.equalsIgnoreCase("full")) {
+            return AIOption.USE_FULL_SIMULATION;
+        }
+        Logger.warn("[AI Preferences] " + name + ": unknown " + AiProps.SIMULATION_MODE + " value "
+                + mode + " in profile " + aiProfile + ", using plain heuristics.");
+        return null;
     }
 
     @Override
