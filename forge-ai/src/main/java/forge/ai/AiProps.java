@@ -147,7 +147,10 @@ public enum AiProps {
     SIDEBOARDING_CHANCE_ON_WIN("0"),
     SIDEBOARDING_IN_LIMITED_FORMATS("false"),
     SIDEBOARDING_SHARED_TYPE_ONLY("false"),
-    SIDEBOARDING_PLANESWALKER_EQ_CREATURE("false");
+    SIDEBOARDING_PLANESWALKER_EQ_CREATURE("false"),
+    // Which simulation-based controller the AI uses: "none" (plain heuristics), "hybrid" or "full".
+    // Lets a profile pick the simulation mode, which is otherwise only reachable from the GUI lobby.
+    SIMULATION_MODE("none");
     // Experimental features, must be promoted or removed after extensive testing and, ideally, defaulting
     // <-- There are no experimental options here -->
 
